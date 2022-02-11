@@ -1,7 +1,6 @@
 # news-info-downloader
 
-## Table of contents
-* [Project overview](#project-overview)
+## Project overview
 
 The app allows you to get articles from [News API](https://newsapi.org/) and view them on the console.
 You can choose which one should be saved to file.
@@ -12,11 +11,11 @@ title:description:author
 ...
 ```
 
-* [Tech used](#technology-used)
+## Tech used
 
 Java 11 SE, Package org.json
 
-* [Instruction](#instruction)
+## Instruction
 
 Once you start the app you will be asked to enter your apiKey to get the access.
 Authentication is performed via the X-Api-Key HTTP header.
