@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class ArticlesPageControllerTest {
 
     @Test
-    public void getArticlesPage_shouldThrowExceptionWhenInproperApiKeyIsUsed() throws IOException {
+    public void getArticlesPage_shouldThrowExceptionWhenWrongApiKeyIsUsed() throws IOException {
         //given
         ArticlesPageController controller = new ArticlesPageController("xx");
         int page = 5;
