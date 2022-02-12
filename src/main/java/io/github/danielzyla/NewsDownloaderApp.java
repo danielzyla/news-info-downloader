@@ -11,18 +11,28 @@ import java.util.InputMismatchException;
 import java.util.Map;
 import java.util.Scanner;
 
-
 public class NewsDownloaderApp {
 
-    public static void main(String[] args) throws IOException {
+    private boolean isAppRunning;
+    private ArticlesPageController controller;
+    private JSONObject pageInJSON;
+    private ArticleService service;
+    private FileHandler fileHandler;
 
-        boolean isAppRunning = true;
+    NewsDownloaderApp() {
+        this.isAppRunning = true;
+        this.controller = null;
+        this.pageInJSON = null;
+        this.service = null;
+        this.fileHandler = null;
+    }
 
-        ArticlesPageController controller = null;
-        JSONObject pageInJSON = null;
-        ArticleService service = null;
-        FileHandler fileHandler = null;
+    public static void main(String[] args) {
+        NewsDownloaderApp app = new NewsDownloaderApp();
+        app.start();
+    }
 
+    void start() {
         try {
             System.out.println("Wpisz klucz do News API :");
             Scanner inputApiKey = new Scanner(System.in);
@@ -32,11 +42,14 @@ public class NewsDownloaderApp {
             controller.setTotalPages(pageInJSON.getInt("totalResults"));
             service = new ArticleService();
             fileHandler = FileHandler.getInstance();
+            operate();
         } catch (Exception e) {
             System.out.println("Podano nieprawidłowy klucz !");
             isAppRunning = false;
         }
+    }
 
+    void operate() {
 
         while (isAppRunning) {
             JSONArray articlePage = pageInJSON.getJSONArray("articles");
@@ -77,7 +90,7 @@ public class NewsDownloaderApp {
                         pageNum = null;
                         System.out.println(info2);
                     }
-                } catch (InputMismatchException e) {
+                } catch (InputMismatchException | IOException e) {
                     pageNum = null;
                     System.out.println(info2);
                 }
