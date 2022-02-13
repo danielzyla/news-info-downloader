@@ -6,7 +6,7 @@ class ArticleService {
 
     private final HashSet<Article> articleSet = new HashSet<>();
 
-    void addArticlesToSet(final ArticleDto articleDto) {
+    void addArticleToSet(final ArticleDto articleDto) {
         final Article articleToSave = dtoToArticle(articleDto);
         articleSet.add(articleToSave);
     }

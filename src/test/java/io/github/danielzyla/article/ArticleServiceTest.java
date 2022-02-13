@@ -22,7 +22,7 @@ public class ArticleServiceTest {
         ArticleDto articleDto = new ArticleDto();
 
         //when
-        service.addArticlesToSet(articleDto);
+        service.addArticleToSet(articleDto);
 
         //then
         assertEquals(service.getArticleSet().size(), 1);
@@ -56,9 +56,9 @@ public class ArticleServiceTest {
         description.set(articleDto3, "title");
 
         //when
-        service.addArticlesToSet(articleDto1);
-        service.addArticlesToSet(articleDto2);
-        service.addArticlesToSet(articleDto3);
+        service.addArticleToSet(articleDto1);
+        service.addArticleToSet(articleDto2);
+        service.addArticleToSet(articleDto3);
 
         //then
         assertEquals(service.getArticleSet().size(), 1);

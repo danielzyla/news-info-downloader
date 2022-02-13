@@ -29,7 +29,7 @@ public class ArticlesPageController {
     }
 
     public void addArticleToSet(final ArticleDto articlePage) {
-        service.addArticlesToSet(articlePage);
+        service.addArticleToSet(articlePage);
     }
 
     public void saveArticlesToFile() {
