@@ -1,17 +1,18 @@
 package io.github.danielzyla;
 
+import io.github.danielzyla.article.ArticleDto;
 import io.github.danielzyla.article.ArticlesPageController;
-import org.json.JSONArray;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.InputMismatchException;
-import java.util.Map;
 import java.util.Scanner;
 
 public class NewsDownloaderApp {
 
     private boolean isAppRunning;
     private ArticlesPageController controller;
+    private final static int PAGE_SIZE = 4;
 
     NewsDownloaderApp() {
         this.isAppRunning = true;
@@ -29,32 +30,31 @@ public class NewsDownloaderApp {
             Scanner inputApiKey = new Scanner(System.in);
             final String apiKey = inputApiKey.next();
             controller = new ArticlesPageController(apiKey);
-            controller.updatePage(1);
-            operate();
+            controller.updatePage(PAGE_SIZE, 1);
         } catch (Exception e) {
             System.out.println("Podano nieprawidłowy klucz !");
-            isAppRunning = false;
+            controller = null;
         }
+        if (controller != null) operate();
     }
 
     void operate() {
-
         while (isAppRunning) {
-            JSONArray articlePage = controller.getPageInJSON().getJSONArray("articles");
+            final ArrayList<ArticleDto> articlesPage = controller.getApiResponsePage().getArticles();
 
-            for (int i = 0; i < articlePage.length(); i++) {
-                final Map<String, Object> stringObjectMap = articlePage.getJSONObject(i).toMap();
-
-                System.out.println("\n PODGLĄD ARTYKUŁU: \n");
-                System.out.println("strona: " + controller.getPage() + " z " + controller.getTotalPages() + "\n");
-                stringObjectMap.forEach((key, value) -> System.out.println(key + ": " + value + "\n"));
+            for (final ArticleDto currentArticle : articlesPage) {
+                System.out.println(
+                        "\nPODGLĄD ARTYKUŁU: \n\n" +
+                                "strona: " + controller.getPage() + " z " + controller.getTotalPages() + "\n\n" +
+                                currentArticle + "\n"
+                );
 
                 Scanner input = new Scanner(System.in);
                 System.out.println("Zapis do pliku ? Wpisz 'T' lub 'N'. " +
                         "Aby wyjść ze strony wciśnij dowolny klawisz oraz enter ...");
                 String inputCommand = input.next();
 
-                if (inputCommand.equalsIgnoreCase("T")) controller.addArticlesToSet(articlePage, i);
+                if (inputCommand.equalsIgnoreCase("T")) controller.addArticleToSet(currentArticle);
                 else if (inputCommand.equalsIgnoreCase("N")) continue;
                 else break;
             }
@@ -70,7 +70,7 @@ public class NewsDownloaderApp {
                     pageNum = input.nextInt();
                     System.out.println(pageNum);
                     if (pageNum > 0 && pageNum <= controller.getTotalPages()) {
-                        controller.updatePage(pageNum);
+                        controller.updatePage(PAGE_SIZE, pageNum);
                     } else if (pageNum == 0) {
                         isAppRunning = false;
                     } else {

@@ -1,22 +1,22 @@
 package io.github.danielzyla.article;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.util.HashSet;
 
 class ArticleService {
 
     private final HashSet<Article> articleSet = new HashSet<>();
 
-    void addArticlesToSet(final JSONArray articlePage, final int i) {
+    void addArticlesToSet(final ArticleDto articleDto) {
+        final Article articleToSave = dtoToArticle(articleDto);
+        articleSet.add(articleToSave);
+    }
+
+    Article dtoToArticle(final ArticleDto articleDto) {
         Article article = new Article();
-        JSONObject articleJSONObject = articlePage.getJSONObject(i);
-        if (!articleJSONObject.isNull("title")) article.setTitle(articleJSONObject.getString("title"));
-        if (!articleJSONObject.isNull("description"))
-            article.setDescription(articleJSONObject.getString("description"));
-        if (!articleJSONObject.isNull("author")) article.setAuthor(articleJSONObject.getString("author"));
-        articleSet.add(article);
+        article.setDescription(articleDto.getDescription());
+        article.setTitle(articleDto.getTitle());
+        article.setAuthor(articleDto.getAuthor());
+        return article;
     }
 
     HashSet<Article> getArticleSet() {

@@ -1,5 +1,7 @@
 # news-info-downloader
 
+[![version](https://img.shields.io/badge/version-1.1.0-yellow)]()
+
 ## Project overview
 
 The app allows you to get articles from [News API](https://newsapi.org/) and view them on the console.
@@ -11,9 +13,9 @@ title:description:author
 ...
 ```
 
-## Tech used
+## Technology used
 
-Java 11 SE, Package org.json
+Java 11 SE, Apache Maven, RestTemplate client (Spring Framework), Project Lombok
 
 ## Instruction
 
