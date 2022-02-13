@@ -1,8 +1,8 @@
 package io.github.danielzyla;
 
-import io.github.danielzyla.controller.ArticlesPageController;
-import io.github.danielzyla.file.FileHandler;
-import io.github.danielzyla.service.ArticleService;
+import io.github.danielzyla.article.ArticlesPageController;
+import io.github.danielzyla.article.ArticleFileHandler;
+import io.github.danielzyla.article.ArticleService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -17,7 +17,7 @@ public class NewsDownloaderApp {
     private ArticlesPageController controller;
     private JSONObject pageInJSON;
     private ArticleService service;
-    private FileHandler fileHandler;
+    private ArticleFileHandler fileHandler;
 
     NewsDownloaderApp() {
         this.isAppRunning = true;
@@ -41,7 +41,7 @@ public class NewsDownloaderApp {
             pageInJSON = controller.getPageInJSON(1);
             controller.setTotalPages(pageInJSON.getInt("totalResults"));
             service = new ArticleService();
-            fileHandler = FileHandler.getInstance();
+            fileHandler = ArticleFileHandler.getInstance();
             operate();
         } catch (Exception e) {
             System.out.println("Podano nieprawidłowy klucz !");

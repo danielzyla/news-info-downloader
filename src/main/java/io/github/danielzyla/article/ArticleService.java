@@ -1,6 +1,6 @@
-package io.github.danielzyla.service;
+package io.github.danielzyla.article;
 
-import io.github.danielzyla.entity.Article;
+import io.github.danielzyla.article.Article;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

@@ -1,6 +1,4 @@
-package io.github.danielzyla.file;
-
-import io.github.danielzyla.entity.Article;
+package io.github.danielzyla.article;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,19 +9,19 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
-public class FileHandler {
+public class ArticleFileHandler {
 
-    private static FileHandler fileHandler;
-    protected final Logger log = Logger.getLogger(FileHandler.class.getName());
+    private static ArticleFileHandler fileHandler;
+    protected final Logger log = Logger.getLogger(ArticleFileHandler.class.getName());
     static File articleDataFile;
 
-    private FileHandler() throws IOException {
+    private ArticleFileHandler() throws IOException {
         createFile();
     }
 
-    public static FileHandler getInstance() throws IOException {
+    public static ArticleFileHandler getInstance() throws IOException {
         if (fileHandler == null) {
-            fileHandler = new FileHandler();
+            fileHandler = new ArticleFileHandler();
         }
         return fileHandler;
     }

@@ -1,4 +1,4 @@
-package io.github.danielzyla.controller;
+package io.github.danielzyla.article;
 
 import org.junit.jupiter.api.Test;
 

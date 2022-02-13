@@ -1,6 +1,7 @@
-package io.github.danielzyla.service;
+package io.github.danielzyla.article;
 
-import io.github.danielzyla.entity.Article;
+import io.github.danielzyla.article.Article;
+import io.github.danielzyla.article.ArticleService;
 import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,6 @@ public class ArticleServiceTest {
 
         //given
         JSONArray jsonArray = new JSONArray(articlesStub);
-        HashSet<Article> articleSet = new HashSet<>();
         ArticleService service = new ArticleService();
         String[] authors = {"Krzysztof Kolany", null, "TOS", "Business Insider Polska"};
 

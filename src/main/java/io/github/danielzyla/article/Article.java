@@ -1,39 +1,39 @@
-package io.github.danielzyla.entity;
+package io.github.danielzyla.article;
 
 import java.util.Objects;
 
-public class Article {
+class Article {
     private String title;
     private String description;
     private String author;
 
-    public Article() {
+    Article() {
         this.title  = "brak danych";
         this.description = "brak danych";
         this.author = "nieznany";
     }
 
-    public String getTitle() {
+    String getTitle() {
         return title;
     }
 
-    public void setTitle(final String title) {
+    void setTitle(final String title) {
         this.title = title;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
-    public void setDescription(final String description) {
+    void setDescription(final String description) {
         this.description = description;
     }
 
-    public String getAuthor() {
+    String getAuthor() {
         return author;
     }
 
-    public void setAuthor(final String author) {
+    void setAuthor(final String author) {
         this.author = author;
     }
 
