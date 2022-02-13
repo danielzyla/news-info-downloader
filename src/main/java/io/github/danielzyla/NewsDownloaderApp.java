@@ -1,10 +1,7 @@
 package io.github.danielzyla;
 
 import io.github.danielzyla.article.ArticlesPageController;
-import io.github.danielzyla.article.ArticleFileHandler;
-import io.github.danielzyla.article.ArticleService;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.InputMismatchException;
@@ -15,16 +12,10 @@ public class NewsDownloaderApp {
 
     private boolean isAppRunning;
     private ArticlesPageController controller;
-    private JSONObject pageInJSON;
-    private ArticleService service;
-    private ArticleFileHandler fileHandler;
 
     NewsDownloaderApp() {
         this.isAppRunning = true;
         this.controller = null;
-        this.pageInJSON = null;
-        this.service = null;
-        this.fileHandler = null;
     }
 
     public static void main(String[] args) {
@@ -38,10 +29,7 @@ public class NewsDownloaderApp {
             Scanner inputApiKey = new Scanner(System.in);
             final String apiKey = inputApiKey.next();
             controller = new ArticlesPageController(apiKey);
-            pageInJSON = controller.getPageInJSON(1);
-            controller.setTotalPages(pageInJSON.getInt("totalResults"));
-            service = new ArticleService();
-            fileHandler = ArticleFileHandler.getInstance();
+            controller.updatePage(1);
             operate();
         } catch (Exception e) {
             System.out.println("Podano nieprawidłowy klucz !");
@@ -52,7 +40,7 @@ public class NewsDownloaderApp {
     void operate() {
 
         while (isAppRunning) {
-            JSONArray articlePage = pageInJSON.getJSONArray("articles");
+            JSONArray articlePage = controller.getPageInJSON().getJSONArray("articles");
 
             for (int i = 0; i < articlePage.length(); i++) {
                 final Map<String, Object> stringObjectMap = articlePage.getJSONObject(i).toMap();
@@ -66,7 +54,7 @@ public class NewsDownloaderApp {
                         "Aby wyjść ze strony wciśnij dowolny klawisz oraz enter ...");
                 String inputCommand = input.next();
 
-                if (inputCommand.equalsIgnoreCase("T")) service.addArticlesToSet(articlePage, i);
+                if (inputCommand.equalsIgnoreCase("T")) controller.addArticlesToSet(articlePage, i);
                 else if (inputCommand.equalsIgnoreCase("N")) continue;
                 else break;
             }
@@ -82,8 +70,7 @@ public class NewsDownloaderApp {
                     pageNum = input.nextInt();
                     System.out.println(pageNum);
                     if (pageNum > 0 && pageNum <= controller.getTotalPages()) {
-                        pageInJSON = controller.getPageInJSON(pageNum);
-                        controller.setTotalPages(pageInJSON.getInt("totalResults"));
+                        controller.updatePage(pageNum);
                     } else if (pageNum == 0) {
                         isAppRunning = false;
                     } else {
@@ -97,9 +84,6 @@ public class NewsDownloaderApp {
             }
         }
 
-        if (service != null) {
-            assert fileHandler != null;
-            fileHandler.saveArticlesToFile(service.getArticleSet());
-        }
+        if (controller != null) controller.saveArticlesToFile();
     }
 }

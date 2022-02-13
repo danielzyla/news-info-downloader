@@ -1,5 +1,6 @@
 package io.github.danielzyla.article;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -17,6 +18,9 @@ public class ArticlesPageController {
     private final int pageSize;
     private HttpURLConnection connection;
     private int totalPages;
+    private JSONObject pageInJSON;
+    private final ArticleService service;
+    private final ArticleFileHandler fileHandler;
 
     public ArticlesPageController(String apiKey) throws IOException {
         this.country = "pl";
@@ -24,10 +28,12 @@ public class ArticlesPageController {
         this.apiKey = apiKey;
         this.pageSize = 4;
         this.page = 1;
-        getConnection();
+        setConnection();
+        this.service = new ArticleService();
+        this.fileHandler = ArticleFileHandler.getInstance();
     }
 
-    private void getConnection() throws IOException {
+    private void setConnection() throws IOException {
         URL url = new URL(String.format("\n" +
                         "https://newsapi.org/v2/top-headlines?country=%s&category=%s&pageSize=%s&page=%s",
                 country,
@@ -43,14 +49,13 @@ public class ArticlesPageController {
 
         if (connection.getResponseCode() != 200) {
             System.out.println("No success response");
-            return;
         }
     }
 
-    public String getArticlesPage(int page) throws IOException {
+    String getArticlesPage(int page) throws IOException {
         this.page = page;
         connection = null;
-        getConnection();
+        setConnection();
         BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String newsDataLine;
         StringBuffer stringBuffer = new StringBuffer();
@@ -63,8 +68,21 @@ public class ArticlesPageController {
         return newsDataPage;
     }
 
-    public void setTotalPages(final int totalResults) {
+    void setTotalPages(final int totalResults) {
         this.totalPages = (int) Math.ceil((double) totalResults / (double) pageSize);
+    }
+
+    public void addArticlesToSet(final JSONArray articlePage, final int i) {
+        service.addArticlesToSet(articlePage, i);
+    }
+
+    public void saveArticlesToFile() {
+        fileHandler.saveArticlesToFile(service.getArticleSet());
+    }
+
+    public void updatePage(final int i) throws IOException {
+        setPageInJSON(i);
+        setTotalPages(pageInJSON.getInt("totalResults"));
     }
 
     public int getPage() {
@@ -75,8 +93,12 @@ public class ArticlesPageController {
         return totalPages;
     }
 
-    public JSONObject getPageInJSON(int page) throws IOException {
+    void setPageInJSON(int page) throws IOException {
         final String articlesPage = getArticlesPage(page);
-        return new JSONObject(articlesPage);
+        this.pageInJSON = new JSONObject(articlesPage);
+    }
+
+    public JSONObject getPageInJSON() {
+        return pageInJSON;
     }
 }

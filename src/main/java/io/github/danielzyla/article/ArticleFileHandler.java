@@ -9,7 +9,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.logging.Logger;
 
-public class ArticleFileHandler {
+class ArticleFileHandler {
 
     private static ArticleFileHandler fileHandler;
     protected final Logger log = Logger.getLogger(ArticleFileHandler.class.getName());
@@ -37,7 +37,7 @@ public class ArticleFileHandler {
         }
     }
 
-    public void saveArticlesToFile(final HashSet<Article> articleSet) {
+    void saveArticlesToFile(final HashSet<Article> articleSet) {
         articleSet.stream().iterator().forEachRemaining(article -> {
             StringBuilder textLineToSave = new StringBuilder();
             try {
