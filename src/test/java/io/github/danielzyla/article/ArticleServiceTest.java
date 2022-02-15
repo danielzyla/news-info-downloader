@@ -1,9 +1,10 @@
 package io.github.danielzyla.article;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
@@ -12,61 +13,28 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ArticleServiceTest {
 
-    static ArticleService service;
-
     @Test
-    public void addArticlesToSet_shouldAddArticleToArticleSet() {
+    public void getArticleDtoListFromPage_shouldReturnListOfArticleDtoElementsFromArticleApiResponsePage() throws IOException, NoSuchFieldException, IllegalAccessException {
 
         //given
         ArticleService service = new ArticleService();
-        ArticleDto articleDto = new ArticleDto();
+        ArticleApiResponsePage apiResponsePage = new ArticleApiResponsePage();
+        final Field articlesField = ArticleApiResponsePage.class.getDeclaredField("articles");
+        articlesField.setAccessible(true);
+        ArrayList<Article> articles = new ArrayList<>();
+        Article article1 = new Article();
+        Article article2 = new Article();
+        Article article3 = new Article();
+        Article article4 = new Article();
+        articles.add(article1);
+        articles.add(article2);
+        articles.add(article3);
+        articles.add(article4);
+        articlesField.set(apiResponsePage, articles);
 
         //when
-        service.addArticleToSet(articleDto);
-
         //then
-        assertEquals(service.getArticleSet().size(), 1);
-        assertThat(service.getArticleSet().stream().iterator().next(), is(instanceOf(Article.class)));
-    }
-
-    @Test
-    public void addArticlesToSet_shouldNotAddToArticlesDuplicatesToSet() throws NoSuchFieldException, IllegalAccessException {
-
-        //given
-        final Field author = ArticleDto.class.getDeclaredField("author");
-        author.setAccessible(true);
-        final Field description = ArticleDto.class.getDeclaredField("description");
-        description.setAccessible(true);
-        final Field title = ArticleDto.class.getDeclaredField("title");
-        title.setAccessible(true);
-
-        ArticleDto articleDto1 = new ArticleDto();
-        author.set(articleDto1, "author");
-        description.set(articleDto1, "description");
-        description.set(articleDto1, "title");
-
-        ArticleDto articleDto2 = new ArticleDto();
-        author.set(articleDto2, "author");
-        description.set(articleDto2, "description");
-        description.set(articleDto2, "title");
-
-        ArticleDto articleDto3 = new ArticleDto();
-        author.set(articleDto3, "author");
-        description.set(articleDto3, "description");
-        description.set(articleDto3, "title");
-
-        //when
-        service.addArticleToSet(articleDto1);
-        service.addArticleToSet(articleDto2);
-        service.addArticleToSet(articleDto3);
-
-        //then
-        assertEquals(service.getArticleSet().size(), 1);
-        assertThat(service.getArticleSet().stream().iterator().next(), is(instanceOf(Article.class)));
-    }
-
-    @BeforeAll
-    static void getArticleServiceStub() {
-        service = new ArticleService();
+        assertEquals(service.getArticleDtoListFromPage(apiResponsePage).size(), 4);
+        assertThat(service.getArticleDtoListFromPage(apiResponsePage).get(0), is(instanceOf(ArticleDto.class)));
     }
 }

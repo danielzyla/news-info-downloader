@@ -37,7 +37,7 @@ class ArticleFileHandler {
         }
     }
 
-    void saveArticlesToFile(final HashSet<Article> articleSet) {
+    void saveArticlesToFile(final HashSet<ArticleDto> articleSet) {
         articleSet.stream().iterator().forEachRemaining(article -> {
             StringBuilder textLineToSave = new StringBuilder();
             try {

@@ -1,25 +1,25 @@
 package io.github.danielzyla.article;
 
+import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 class ArticleService {
 
-    private final HashSet<Article> articleSet = new HashSet<>();
+    private final ArticleFileHandler fileHandler;
 
-    void addArticleToSet(final ArticleDto articleDto) {
-        final Article articleToSave = dtoToArticle(articleDto);
-        articleSet.add(articleToSave);
+    ArticleService() throws IOException {
+        this.fileHandler = ArticleFileHandler.getInstance();
     }
 
-    Article dtoToArticle(final ArticleDto articleDto) {
-        Article article = new Article();
-        article.setDescription(articleDto.getDescription());
-        article.setTitle(articleDto.getTitle());
-        article.setAuthor(articleDto.getAuthor());
-        return article;
+    List<ArticleDto> getArticleDtoListFromPage(final ArticleApiResponsePage apiResponsePage) {
+        return apiResponsePage.getArticles().stream()
+                .map(ArticleDto::new)
+                .collect(Collectors.toList());
     }
 
-    HashSet<Article> getArticleSet() {
-        return articleSet;
+    void saveArticlesToFile(final HashSet<ArticleDto> articlesToSave) {
+        fileHandler.saveArticlesToFile(articlesToSave);
     }
 }

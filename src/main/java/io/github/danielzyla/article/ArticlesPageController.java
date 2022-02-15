@@ -1,13 +1,14 @@
 package io.github.danielzyla.article;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.List;
 
 public class ArticlesPageController {
     private final String apiKey;
     private int page;
     private int totalPages;
     private final ArticleService service;
-    private final ArticleFileHandler fileHandler;
     private final ArticleRestClient restClient;
     private ArticleApiResponsePage apiResponsePage;
 
@@ -15,7 +16,6 @@ public class ArticlesPageController {
         this.apiKey = apiKey;
         this.restClient = new ArticleRestClient();
         this.service = new ArticleService();
-        this.fileHandler = ArticleFileHandler.getInstance();
     }
 
     void setTotalPages(final int totalResults, final int pageSize) {
@@ -28,12 +28,12 @@ public class ArticlesPageController {
         setTotalPages(this.apiResponsePage.getTotalResults(), pageSize);
     }
 
-    public void addArticleToSet(final ArticleDto articlePage) {
-        service.addArticleToSet(articlePage);
+    public List<ArticleDto> getArticleDtoListFromPage() {
+        return service.getArticleDtoListFromPage(getApiResponsePage());
     }
 
-    public void saveArticlesToFile() {
-        fileHandler.saveArticlesToFile(service.getArticleSet());
+    public void saveArticlesToFile(final HashSet<ArticleDto> articlesToSave) {
+        service.saveArticlesToFile(articlesToSave);
     }
 
     public int getPage() {

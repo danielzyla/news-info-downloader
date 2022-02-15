@@ -14,7 +14,6 @@ class ArticleRestClient {
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
 
-
     ArticleRestClient() {
         this.restTemplate = new RestTemplate();
         this.headers = new HttpHeaders();
