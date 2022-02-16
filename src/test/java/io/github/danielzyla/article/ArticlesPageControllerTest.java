@@ -1,31 +1,60 @@
 package io.github.danielzyla.article;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.BDDMockito.given;
 
-public class ArticlesPageControllerTest {
+class ArticlesPageControllerTest {
 
-    @Test
-    public void updatePage_shouldCallSetTotalPagesMethod() throws IOException, NoSuchFieldException, IllegalAccessException {
-        //given
-        ArticlesPageController controller = new ArticlesPageController("test-key");
+    static ArticlesPageController controller;
+    static ArticleApiResponsePage apiResponsePage;
+    static ArticleRestClient articleRestClientMock;
+    static ArrayList<Article> articleArrayList;
+
+    @BeforeAll
+    static void setController() throws IOException, NoSuchFieldException, IllegalAccessException {
+        controller = new ArticlesPageController("test-key");
+        apiResponsePage = new ArticleApiResponsePage();
+        articleRestClientMock = Mockito.mock(ArticleRestClient.class);
+
         final Field restClient = ArticlesPageController.class.getDeclaredField("restClient");
         restClient.setAccessible(true);
-        ArticleRestClient articleRestClientMock = Mockito.mock(ArticleRestClient.class);
         restClient.set(controller, articleRestClientMock);
 
-        ArticleApiResponsePage apiResponsePage = new ArticleApiResponsePage();
         final Field totalResults = ArticleApiResponsePage.class.getDeclaredField("totalResults");
         totalResults.setAccessible(true);
         totalResults.set(apiResponsePage, 50);
 
+        final Field articles = ArticleApiResponsePage.class.getDeclaredField("articles");
+        articles.setAccessible(true);
+        articleArrayList = new ArrayList<>();
+        articleArrayList.add(new Article());
+        articleArrayList.add(new Article());
+        articleArrayList.add(new Article());
+        articles.set(apiResponsePage, articleArrayList);
+
         given(articleRestClientMock.getArticlesPage("test-key", 4, 1)).willReturn(apiResponsePage);
+
+        final Field apiResponsePageField = ArticlesPageController.class.getDeclaredField("apiResponsePage");
+        apiResponsePageField.setAccessible(true);
+        apiResponsePageField.set(controller, apiResponsePage);
+    }
+
+    @Test
+    void updatePage_shouldCallSetTotalPagesMethod() throws IOException {
+        //given
+        //see @BeforeAll
 
         //when
         controller.updatePage(4, 1);
@@ -35,9 +64,8 @@ public class ArticlesPageControllerTest {
     }
 
     @Test
-    public void setTotalPages_shouldReturn_ProperValueOfTotalPages() throws IOException {
+    void setTotalPages_shouldReturnProperValueOfTotalPages() {
         //given
-        ArticlesPageController controller = new ArticlesPageController("test-key");
         int totalResults = 100;
         int pageSize = 8;
 
@@ -46,5 +74,18 @@ public class ArticlesPageControllerTest {
 
         //then
         assertEquals(13, controller.getTotalPages());
+    }
+
+    @Test
+    void getArticleDtoListFromPage_shouldReturnListOfArticleDtoFromService() {
+        //given
+        //see @BeforeAll
+
+        //when
+        final List<ArticleDto> articleDtoListFromPage = controller.getArticleDtoListFromPage();
+
+        //then
+        assertEquals(articleArrayList.size(), articleDtoListFromPage.size());
+        assertThat(articleDtoListFromPage.get(0), is(instanceOf(ArticleDto.class)));
     }
 }

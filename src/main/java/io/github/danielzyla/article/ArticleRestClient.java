@@ -1,9 +1,6 @@
 package io.github.danielzyla.article;
 
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,6 +17,10 @@ class ArticleRestClient {
     }
 
     ArticleApiResponsePage getArticlesPage(final String apiKey, final int pageSize, final int page) {
+        return getResponseEntity(apiKey, pageSize, page).getBody();
+    }
+
+    ResponseEntity<ArticleApiResponsePage> getResponseEntity(final String apiKey, final int pageSize, final int page) {
         headers.set("X-Api-Key", apiKey);
         HttpEntity<String> request = new HttpEntity<>(headers);
         try {
@@ -34,10 +35,9 @@ class ArticleRestClient {
                     request,
                     ArticleApiResponsePage.class
             );
-            return response.getBody();
+            return response;
         } catch (HttpClientErrorException e) {
-            e.getCause();
-            return null;
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 }

@@ -7,10 +7,10 @@ import java.io.IOException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-public class ArticleFileHandlerTest {
+class ArticleFileHandlerTest {
 
     @Test
-    public void getInstance_shouldReturnTheSameFileHandlerInstance_WhenCalledMultipleTimes() throws IOException {
+    void getInstance_shouldReturnTheSameFileHandlerInstance_WhenCalledMultipleTimes() throws IOException {
         //given, when
         ArticleFileHandler fileHandler1 = ArticleFileHandler.getInstance();
         ArticleFileHandler fileHandler2 = ArticleFileHandler.getInstance();
@@ -25,7 +25,7 @@ public class ArticleFileHandlerTest {
     }
 
     @Test
-    public void saveArticlesToFile() {
+    void saveArticlesToFile() {
         //TODO
     }
 }

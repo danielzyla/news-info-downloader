@@ -27,7 +27,7 @@ public class NewsDownloaderApp {
         app.start();
     }
 
-    private void start() {
+    void start() {
         try {
             System.out.println("Wpisz klucz do News API :");
             Scanner inputApiKey = new Scanner(System.in);
@@ -41,7 +41,7 @@ public class NewsDownloaderApp {
         if (controller != null) operate();
     }
 
-    private void operate() {
+    void operate() {
 
         while (isAppRunning) {
             final List<ArticleDto> articlesPage = controller.getArticleDtoListFromPage();
@@ -57,7 +57,7 @@ public class NewsDownloaderApp {
         if (controller != null) controller.saveArticlesToFile(this.articlesToSave);
     }
 
-    private void selectPage(final String info) {
+    void selectPage(final String info) {
         Integer pageNum = null;
         while (pageNum == null) {
             String info2 = "Wpisz prawidłowy numer strony ! " + info;
@@ -80,7 +80,7 @@ public class NewsDownloaderApp {
         }
     }
 
-    private void iterateAndViewArticles(final List<ArticleDto> articlesPage) {
+    void iterateAndViewArticles(final List<ArticleDto> articlesPage) {
         for (final ArticleDto currentArticle : articlesPage) {
             System.out.println(
                     "\nPODGLĄD ARTYKUŁU: \n\n" +
@@ -99,7 +99,7 @@ public class NewsDownloaderApp {
         }
     }
 
-    private void addArticleToSet(final ArticleDto currentArticle) {
+    void addArticleToSet(final ArticleDto currentArticle) {
         articlesToSave.add(currentArticle);
     }
 }

@@ -5,7 +5,7 @@ import lombok.Getter;
 import java.time.ZonedDateTime;
 
 @Getter
-public class Article {
+class Article {
     private ArticleSource source;
     private String author;
     private String title;

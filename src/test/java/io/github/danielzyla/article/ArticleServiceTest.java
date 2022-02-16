@@ -11,11 +11,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class ArticleServiceTest {
+class ArticleServiceTest {
 
     @Test
-    public void getArticleDtoListFromPage_shouldReturnListOfArticleDtoElementsFromArticleApiResponsePage() throws IOException, NoSuchFieldException, IllegalAccessException {
-
+    void getArticleDtoListFromPage_shouldReturnListOfArticleDtoElementsFromArticleApiResponsePage() throws IOException, NoSuchFieldException, IllegalAccessException {
         //given
         ArticleService service = new ArticleService();
         ArticleApiResponsePage apiResponsePage = new ArticleApiResponsePage();
