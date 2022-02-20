@@ -23,7 +23,7 @@ class ArticlesPageControllerTest {
     static ArrayList<Article> articleArrayList;
 
     @BeforeAll
-    static void setController() throws IOException, NoSuchFieldException, IllegalAccessException {
+    static void setController() throws IOException, NoSuchFieldException, IllegalAccessException, InterruptedException {
         controller = new ArticlesPageController("test-key");
         apiResponsePage = new ArticleApiResponsePage();
         articleRestClientMock = Mockito.mock(ArticleRestClient.class);
@@ -52,7 +52,7 @@ class ArticlesPageControllerTest {
     }
 
     @Test
-    void updatePage_shouldCallSetTotalPagesMethod() throws IOException {
+    void updatePage_shouldCallSetTotalPagesMethod() throws IOException, InterruptedException {
         //given
         //see @BeforeAll
 

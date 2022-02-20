@@ -42,7 +42,6 @@ public class NewsDownloaderApp {
     }
 
     void operate() {
-
         while (isAppRunning) {
             final List<ArticleDto> articlesPage = controller.getArticleDtoListFromPage();
 
@@ -73,7 +72,7 @@ public class NewsDownloaderApp {
                     pageNum = null;
                     System.out.println(info2);
                 }
-            } catch (InputMismatchException | IOException e) {
+            } catch (InputMismatchException | IOException | InterruptedException e) {
                 pageNum = null;
                 System.out.println(info2);
             }

@@ -22,7 +22,7 @@ public class ArticlesPageController {
         this.totalPages = (int) Math.ceil((double) totalResults / (double) pageSize);
     }
 
-    public void updatePage(final int pageSize, final int page) throws IOException {
+    public void updatePage(final int pageSize, final int page) throws IOException, InterruptedException {
         this.page = page;
         this.apiResponsePage = this.restClient.getArticlesPage(this.apiKey, pageSize, getPage());
         setTotalPages(this.apiResponsePage.getTotalResults(), pageSize);
