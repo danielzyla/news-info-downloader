@@ -2,10 +2,10 @@ package io.github.danielzyla.article;
 
 import lombok.Getter;
 
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
+
+import static io.github.danielzyla.utils.DateTimeConverter.getFormattedPublishedAt;
 
 @Getter
 public class ArticleDto {
@@ -27,12 +27,6 @@ public class ArticleDto {
         this.urlToImage = article.getUrlToImage() != null ? article.getUrlToImage() : "brak danych";
         this.publishedAt = article.getPublishedAt() != null ? article.getPublishedAt() : ZonedDateTime.now();
         this.content = article.getContent() != null ? article.getContent() : "brak danych";
-    }
-
-    String getFormattedPublishedAt() {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd, HH:mm");
-        ZonedDateTime zonedDateTime = getPublishedAt().withZoneSameInstant(ZoneId.systemDefault());
-        return dateTimeFormatter.format(zonedDateTime);
     }
 
     @Override
@@ -58,7 +52,7 @@ public class ArticleDto {
                 "opis='" + description + "'\n" +
                 "link='" + url + "'\n" +
                 "link do obrazka='" + urlToImage + "'\n" +
-                "opublikowano='" + getFormattedPublishedAt() + "'\n" +
+                "opublikowano='" + getFormattedPublishedAt(getPublishedAt()) + "'\n" +
                 "zawartość='" + content + "'";
     }
 }
