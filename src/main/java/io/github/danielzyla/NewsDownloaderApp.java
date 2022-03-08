@@ -2,6 +2,8 @@ package io.github.danielzyla;
 
 import io.github.danielzyla.article.ArticleDto;
 import io.github.danielzyla.article.ArticlesPageController;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -9,6 +11,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+@SpringBootApplication
 public class NewsDownloaderApp {
 
     private boolean isAppRunning;
@@ -23,8 +26,7 @@ public class NewsDownloaderApp {
     }
 
     public static void main(String[] args) {
-        NewsDownloaderApp app = new NewsDownloaderApp();
-        app.start();
+        SpringApplication.run(NewsDownloaderApp.class, args);
     }
 
     void start() {
