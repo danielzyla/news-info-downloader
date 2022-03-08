@@ -1,6 +1,6 @@
 # news-info-downloader
 
-[![version](https://img.shields.io/badge/version-1.1.0-yellow)]()
+[![version](https://img.shields.io/badge/version-1.2.0-yellow)]()
 
 ## Project overview
 
