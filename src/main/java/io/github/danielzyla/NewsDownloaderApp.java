@@ -19,9 +19,9 @@ public class NewsDownloaderApp {
     private final static int PAGE_SIZE = 4;
     private final HashSet<ArticleDto> articlesToSave;
 
-    NewsDownloaderApp() {
+    public NewsDownloaderApp(ArticlesPageController controller) {
         this.isAppRunning = true;
-        this.controller = null;
+        this.controller = controller;
         this.articlesToSave = new HashSet<>();
     }
 
@@ -29,18 +29,15 @@ public class NewsDownloaderApp {
         SpringApplication.run(NewsDownloaderApp.class, args);
     }
 
-    void start() {
+    public void start(final String inputApiKey) {
         try {
-            System.out.println("Wpisz klucz do News API :");
-            Scanner inputApiKey = new Scanner(System.in);
-            final String apiKey = inputApiKey.next();
-            controller = new ArticlesPageController(apiKey);
+            controller.setApiKey(inputApiKey);
             controller.updatePage(PAGE_SIZE, 1);
         } catch (Exception e) {
             System.out.println("Podano nieprawidłowy klucz !");
-            controller = null;
+//            controller = null;
         }
-        if (controller != null) operate();
+//        if (controller != null) operate();
     }
 
     void operate() {

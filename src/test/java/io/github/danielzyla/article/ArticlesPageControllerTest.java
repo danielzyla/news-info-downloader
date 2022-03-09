@@ -24,7 +24,8 @@ class ArticlesPageControllerTest {
 
     @BeforeAll
     static void setController() throws IOException, NoSuchFieldException, IllegalAccessException, InterruptedException {
-        controller = new ArticlesPageController("test-key");
+        controller = new ArticlesPageController();
+        controller.setApiKey("test-key");
         apiResponsePage = new ArticleApiResponsePage();
         articleRestClientMock = Mockito.mock(ArticleRestClient.class);
 

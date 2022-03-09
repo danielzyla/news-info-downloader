@@ -1,19 +1,26 @@
 package io.github.danielzyla.article;
 
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 
+@Controller
 public class ArticlesPageController {
-    private final String apiKey;
+    private String apiKey;
     private int page;
     private int totalPages;
     private final ArticleService service;
     private final ArticleRestClient restClient;
     private ArticleApiResponsePage apiResponsePage;
 
-    public ArticlesPageController(String apiKey) throws IOException {
-        this.apiKey = apiKey;
+    public ArticlesPageController() throws IOException {
         this.restClient = new ArticleRestClient();
         this.service = new ArticleService();
     }
@@ -25,7 +32,21 @@ public class ArticlesPageController {
     public void updatePage(final int pageSize, final int page) throws IOException, InterruptedException {
         this.page = page;
         this.apiResponsePage = this.restClient.getArticlesPage(this.apiKey, pageSize, getPage());
-        setTotalPages(this.apiResponsePage.getTotalResults(), pageSize);
+        if (this.apiResponsePage != null) {
+            setTotalPages(this.apiResponsePage.getTotalResults(), pageSize);
+        }
+    }
+
+    @GetMapping("/articlesPage")
+    public String getArticlesPageView(Model model) {
+        if (this.apiResponsePage != null) {
+            model.addAttribute("pageOfArticles", getArticleDtoListFromPage());
+            return "articlesPage";
+        } else {
+            final String message = URLEncoder.encode("invalid API key given", StandardCharsets.UTF_8);
+            model.addAttribute("message", message);
+            return "redirect:/?message=" + message;
+        }
     }
 
     public List<ArticleDto> getArticleDtoListFromPage() {
@@ -46,5 +67,15 @@ public class ArticlesPageController {
 
     public ArticleApiResponsePage getApiResponsePage() {
         return apiResponsePage;
+    }
+
+    public void setApiKey(final String apiKey) {
+        this.apiKey = apiKey;
+    }
+
+    @ExceptionHandler
+    public String errorHandler(Model model, Exception e) {
+        model.addAttribute("error", e);
+        return "error";
     }
 }
