@@ -2,10 +2,9 @@ package io.github.danielzyla.article;
 
 import lombok.Getter;
 
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Objects;
-
-import static io.github.danielzyla.utils.DateTimeConverter.getFormattedPublishedAt;
 
 @Getter
 public class ArticleDto {
@@ -25,7 +24,7 @@ public class ArticleDto {
         this.description = article.getDescription() != null ? article.getDescription() : "brak danych";
         this.url = article.getUrl() != null ? article.getUrl() : "brak danych";
         this.urlToImage = article.getUrlToImage() != null ? article.getUrlToImage() : "brak danych";
-        this.publishedAt = article.getPublishedAt() != null ? article.getPublishedAt() : ZonedDateTime.now();
+        this.publishedAt = article.getPublishedAt() != null ? article.getPublishedAt().withZoneSameInstant(ZoneId.systemDefault()) : ZonedDateTime.now();
         this.content = article.getContent() != null ? article.getContent() : "brak danych";
     }
 
@@ -42,17 +41,5 @@ public class ArticleDto {
     @Override
     public int hashCode() {
         return Objects.hash(title, description, author);
-    }
-
-    @Override
-    public String toString() {
-        return "źródło='" + source.getName() + "'\n" +
-                "autor='" + author + "'\n" +
-                "tytuł='" + title + "'\n" +
-                "opis='" + description + "'\n" +
-                "link='" + url + "'\n" +
-                "link do obrazka='" + urlToImage + "'\n" +
-                "opublikowano='" + getFormattedPublishedAt(getPublishedAt()) + "'\n" +
-                "zawartość='" + content + "'";
     }
 }

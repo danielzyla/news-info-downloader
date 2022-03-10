@@ -32,7 +32,7 @@ class HomeController {
     ) {
         try {
             newsDownloaderApp.start(inputApiKey);
-            return "redirect:/articlesPage";
+            return "redirect:/articlesPage/1";
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
             return "home";

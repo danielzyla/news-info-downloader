@@ -9,36 +9,40 @@
 </head>
 <body>
     <div class="container mt-5">
+
       <nav aria-label="Page navigation example">
-        <ul class="pagination justify-content-center">
+        <ul class="pagination justify-content-center" th:if="${totalPages > 1}">
           <li class="page-item disabled">
-            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;&lt;</a>
           </li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#">2</a></li>
-          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
+            <li class="page-item" th:classappend="${i == pageNumber ? 'active' : ''}">
+              <a class="page-link" th:href="@{'/articlesPage/' + ${i}}" th:text="${i}">i</a>
+            </li>
+          </th:block>
           <li class="page-item">
-            <a class="page-link" href="#">Next</a>
+            <a class="page-link" href="#">&gt;&gt;</a>
           </li>
         </ul>
       </nav>
+      
       <div class="table-responsive">
         <table class="table">
           <tbody>
             <tr th:each="a : ${pageOfArticles}">
               <div class="card mt-5">
-                <img th:src="${a.urlToImage}" class="card-img-top" alt="...">
+                <img th:src="${a.urlToImage}" class="card-img-top" alt="image">
                 <div class="card-body">
                   <h5 class="card-title" th:text="${a.title}">...</h5>
-                  <p class="card-text" th:text="${a.content}">...</p>
+                  <p class="card-text" th:text="${a.description}">...</p>
                 </div>
                 <ul class="list-group list-group-flush">
-                  <li class="list-group-item" th:text="${a.author}">...</li>
-                  <li class="list-group-item" th:text="${a.source.name}">...</li>
-                  <li class="list-group-item" th:text="${a.publishedAt}">...</li>
+                  <li class="list-group-item" th:text="'Autor: ' + ${a.author}">...</li>
+                  <li class="list-group-item" th:text="'Źródło: ' + ${a.source.name}">...</li>
+                  <li class="list-group-item" th:text="${#temporals.format(a.publishedAt, 'dd/MMM/yyyy HH:mm')}">...</li>
                 </ul>
                 <div class="card-body">
-                  <a th:href="${a.url}" class="card-link">link to article</a>
+                  <a th:href="${a.url}" class="card-link">link do artykułu</a>
                 </div>
               </div>
             </tr>

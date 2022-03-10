@@ -53,7 +53,7 @@ class ArticlesPageControllerTest {
     }
 
     @Test
-    void updatePage_shouldCallSetTotalPagesMethod() throws IOException, InterruptedException {
+    void updatePage_shouldCallSetTotalPagesMethod() throws InterruptedException {
         //given
         //see @BeforeAll
 
