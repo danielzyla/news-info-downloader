@@ -13,13 +13,13 @@ class ArticleService {
         this.fileHandler = ArticleFileHandler.getInstance();
     }
 
-    List<ArticleDto> getArticleDtoListFromPage(final ArticleApiResponsePage apiResponsePage) {
+    List<ArticleReadDto> getArticleDtoListFromPage(final ArticleApiResponsePage apiResponsePage) {
         return apiResponsePage.getArticles().stream()
-                .map(ArticleDto::new)
+                .map(ArticleReadDto::new)
                 .collect(Collectors.toList());
     }
 
-    void saveArticlesToFile(final HashSet<ArticleDto> articlesToSave) {
+    void saveArticlesToFile(final HashSet<ArticleWriteDto> articlesToSave) {
         fileHandler.saveArticlesToFile(articlesToSave);
     }
 }

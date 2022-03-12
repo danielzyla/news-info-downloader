@@ -83,10 +83,10 @@ class ArticlesPageControllerTest {
         //see @BeforeAll
 
         //when
-        final List<ArticleDto> articleDtoListFromPage = controller.getArticleDtoListFromPage();
+        final List<ArticleReadDto> articleReadDtoListFromPage = controller.getArticleDtoListFromPage();
 
         //then
-        assertEquals(articleArrayList.size(), articleDtoListFromPage.size());
-        assertThat(articleDtoListFromPage.get(0), is(instanceOf(ArticleDto.class)));
+        assertEquals(articleArrayList.size(), articleReadDtoListFromPage.size());
+        assertThat(articleReadDtoListFromPage.get(0), is(instanceOf(ArticleReadDto.class)));
     }
 }

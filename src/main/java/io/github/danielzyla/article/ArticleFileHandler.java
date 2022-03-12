@@ -23,7 +23,7 @@ class ArticleFileHandler implements FileHandler {
         return fileHandler;
     }
 
-    void saveArticlesToFile(final HashSet<ArticleDto> articleSet) {
+    void saveArticlesToFile(final HashSet<ArticleWriteDto> articleSet) {
         articleSet.stream().iterator().forEachRemaining(article -> {
             StringBuilder textLineToSave = new StringBuilder();
             try {

@@ -34,6 +34,6 @@ class ArticleServiceTest {
         //when
         //then
         assertEquals(service.getArticleDtoListFromPage(apiResponsePage).size(), 4);
-        assertThat(service.getArticleDtoListFromPage(apiResponsePage).get(0), is(instanceOf(ArticleDto.class)));
+        assertThat(service.getArticleDtoListFromPage(apiResponsePage).get(0), is(instanceOf(ArticleReadDto.class)));
     }
 }
