@@ -1,8 +1,11 @@
 package io.github.danielzyla.article;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 
@@ -11,12 +14,25 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
 
+    @Mock
+    private ArticleFileHandler fileHandler;
+
+    @Mock
+    private ArticlePaging paging;
+
+    @Mock
+    private ArticleRestClient restClient;
+
+    @InjectMocks
+    private ArticleService service;
+
     @Test
-    void getArticleDtoListFromPage_shouldReturnListOfArticleDtoElementsFromArticleApiResponsePage() throws IOException, NoSuchFieldException, IllegalAccessException {
+    void getArticleDtoListFromPage_shouldReturnListOfArticleDtoElementsFromArticleApiResponsePage() throws NoSuchFieldException, IllegalAccessException {
         //given
-        ArticleService service = new ArticleService();
+
         ArticleApiResponsePage apiResponsePage = new ArticleApiResponsePage();
         final Field articlesField = ArticleApiResponsePage.class.getDeclaredField("articles");
         articlesField.setAccessible(true);
@@ -34,6 +50,6 @@ class ArticleServiceTest {
         //when
         //then
         assertEquals(service.getArticleDtoListFromPage(apiResponsePage).size(), 4);
-        assertThat(service.getArticleDtoListFromPage(apiResponsePage).get(0), is(instanceOf(ArticleReadDto.class)));
+        assertThat(service.getArticleDtoListFromPage(apiResponsePage).get(0), is(instanceOf(ArticleDto.class)));
     }
 }

@@ -1,6 +1,7 @@
 package io.github.danielzyla.article;
 
-import io.github.danielzyla.utils.FileHandler;
+import org.springframework.stereotype.Component;
+import org.springframework.util.FileSystemUtils;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,31 +9,31 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 
-class ArticleFileHandler implements FileHandler {
+@Component
+class ArticleFileHandler {
 
-    private static ArticleFileHandler fileHandler;
+    private static final String FILENAME = "articlesData.csv";
 
-    private ArticleFileHandler() throws IOException {
-        createFile("articlesData.txt");
-    }
-
-    public static ArticleFileHandler getInstance() throws IOException {
-        if (fileHandler == null) {
-            fileHandler = new ArticleFileHandler();
+    void saveArticlesToFile(final HashSet<ArticleDto> articleSet) {
+        try {
+            FileSystemUtils.deleteRecursively(Paths.get(FILENAME));
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return fileHandler;
-    }
 
-    void saveArticlesToFile(final HashSet<ArticleWriteDto> articleSet) {
         articleSet.stream().iterator().forEachRemaining(article -> {
             StringBuilder textLineToSave = new StringBuilder();
             try {
                 Files.writeString(
-                        Paths.get("articlesData.txt"),
+                        Paths.get(ArticleFileHandler.FILENAME),
                         (
-                                textLineToSave.append(article.getTitle()).append(":")
-                                        .append(article.getDescription()).append(":")
-                                        .append(article.getAuthor()).append(":")
+                                textLineToSave
+                                        .append(article.getPublishedAt()).append(";")
+                                        .append(article.getSource().getName()).append(";")
+                                        .append(article.getAuthor()).append(";")
+                                        .append(article.getUrl()).append(";")
+                                        .append(article.getTitle()).append(";")
+                                        .append(article.getDescription())
                                         + System.lineSeparator()
                         ),
                         StandardOpenOption.CREATE,

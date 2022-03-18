@@ -1,10 +1,10 @@
 # news-info-downloader
 
-[![version](https://img.shields.io/badge/version-1.2.0-yellow)]()
+[![version](https://img.shields.io/badge/version-1.3.0-yellow)]()
 
 ## Project overview
 
-The app allows you to get articles from [News API](https://newsapi.org/).
+The app allows you to get articles from [News API](https://newsapi.org/) and download them to file.
 The result is paginated and you will get it as html view at http://localhost:8080/articlesPage/{pageNumber}.
 
 ## Technology used

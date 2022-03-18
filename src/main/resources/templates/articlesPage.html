@@ -13,9 +13,9 @@
       <h2 class="display-2 text-light p-2">Wiadomości z Polski</h2>
       <p class="text-light">Artykuły zebrane za pomocą <a href="https://newsapi.org/">NEWS API</a></p>
       <div class="row g-2">
-        <div class="col-1">
-          <div class="p-3">
-            <nav class="mt-3">
+        <div class="col-1" style="display: flex; justify-content: center;">
+          <div>
+            <nav class="p-3">
               <ul class="pagination pagination-lg justify-content-center flex-column" th:if="${totalPages > 1}">
                 <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
                   <li class="page-item" th:classappend="${i == pageNumber ? 'active' : ''}">
@@ -27,11 +27,11 @@
           </div>
         </div>
         <div class="col-11">
-          <div class="p-3">
+          <div>
             <form th:action="@{'/articlesPage/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
               <div class="row justify-content-evenly">
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3" th:each="a : ${pageOfArticles}">
-                  <div class="card mt-3">
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 p-3" th:each="a : ${pageOfArticles}">
+                  <div class="card h-100">
                     <img th:src="${a.urlToImage}" class="card-img-top" alt=" brak zdjęcia">
                     <div class="card-body">
                       <h5 class="card-title" th:text="${a.title}">...</h5>
@@ -44,15 +44,16 @@
                       <li class="list-group-item" th:text="${a.publishedAt}">...</li>
                       <li class="list-group-item">
                         <span>
-                          zapis do pliku 
-                          <input type="checkbox" th:field="*{articleDtoList}" th:value='|{"author": "${a.author}", "title": "${a.title}", "description": "${a.description}"}|'/>
+                          do zapisu 
+                          <input type="checkbox" th:field="*{selectedArticleDtoIds}" th:value="${a.id}"/>
                         </span>
                       </li>
                     </ul>
                   </div>
                 </div>
               </div>
-              <button type="submit" class="btn btn-primary" name="saveArticle">Zapisz</button>
+              <button type="submit" class="btn btn-info ms-3" name="saveArticle">Zapisz wybrane</button>
+              <a th:href="@{/downloadFile/articlesData}" class="btn btn-success ms-3">Pobierz plik</a>
             </form>
           </div>
         </div>

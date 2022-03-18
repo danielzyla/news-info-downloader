@@ -1,6 +1,7 @@
 package io.github.danielzyla.controller;
 
-import io.github.danielzyla.NewsDownloaderApp;
+import io.github.danielzyla.article.ArticleService;
+import io.github.danielzyla.article.ArticlePaging;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,10 +14,12 @@ import java.nio.charset.StandardCharsets;
 @Controller
 class HomeController {
 
-    private final NewsDownloaderApp newsDownloaderApp;
+    private final ArticleService service;
+    private final ArticlePaging articlePaging;
 
-    HomeController(final NewsDownloaderApp newsDownloaderApp) {
-        this.newsDownloaderApp = newsDownloaderApp;
+    HomeController(final ArticleService service, final ArticlePaging articlePaging) {
+        this.service = service;
+        this.articlePaging = articlePaging;
     }
 
     @GetMapping("/")
@@ -26,14 +29,13 @@ class HomeController {
     }
 
     @PostMapping("/")
-    String enterApiKey(
-            Model model,
-            @RequestParam(name = "inputApiKey", defaultValue = "") String inputApiKey
-    ) {
+    String enterApiKey(@RequestParam(name = "inputApiKey", defaultValue = "") String inputApiKey) {
         try {
-            newsDownloaderApp.start(inputApiKey);
+            service.setApiKey(inputApiKey);
+            articlePaging.setCurrentPage(1);
+            service.updatePage();
             return "redirect:/articlesPage/1";
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | InterruptedException e) {
             e.printStackTrace();
             return "home";
         }
