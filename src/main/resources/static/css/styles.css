@@ -4,6 +4,18 @@
     box-sizing: border-box;
 }
 
+body {
+    background-image: url("/img/pexels-suzy-hazelwood-5010877.jpg");
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: rgba(108, 117, 125, 0.7);
+}
+
 .message {
     color: red;
 }
