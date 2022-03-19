@@ -1,50 +1,77 @@
 package io.github.danielzyla.article;
 
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 
+@Controller
 public class ArticlesPageController {
-    private final String apiKey;
-    private int page;
-    private int totalPages;
     private final ArticleService service;
-    private final ArticleRestClient restClient;
-    private ArticleApiResponsePage apiResponsePage;
+    private final ArticlePaging articlePaging;
 
-    public ArticlesPageController(String apiKey) throws IOException {
-        this.apiKey = apiKey;
-        this.restClient = new ArticleRestClient();
-        this.service = new ArticleService();
+    ArticlesPageController(final ArticleService service, final ArticlePaging articlePaging) {
+        this.service = service;
+        this.articlePaging = articlePaging;
     }
 
-    void setTotalPages(final int totalResults, final int pageSize) {
-        this.totalPages = (int) Math.ceil((double) totalResults / (double) pageSize);
+    @GetMapping("/articlesPage/{pageNumber}")
+    String getArticlesPageView(Model model, @PathVariable Integer pageNumber) throws InterruptedException {
+        this.articlePaging.setCurrentPage(pageNumber);
+        String message = this.service.getArticlesPage(model);
+        if (message != null) return message;
+        model.addAttribute("selectedArticles", this.service.getSelectedArticlesDtoTotal());
+        addAttributesToModel(model);
+        return "articlesPage";
     }
 
-    public void updatePage(final int pageSize, final int page) throws IOException, InterruptedException {
-        this.page = page;
-        this.apiResponsePage = this.restClient.getArticlesPage(this.apiKey, pageSize, getPage());
-        setTotalPages(this.apiResponsePage.getTotalResults(), pageSize);
+    @PostMapping(path = "/articlesPage/{pageNumber}", params = "saveArticle")
+    String saveSelectedArticles(
+            Model model,
+            @PathVariable Integer pageNumber,
+            @ModelAttribute("selectedArticles") SelectedArticlesDto fromPage
+    ) throws InterruptedException {
+        this.articlePaging.setCurrentPage(pageNumber);
+        this.service.combineSelectedWithTotal(fromPage);
+        String message = this.service.getArticlesPage(model);
+        if (message != null) return message;
+        addAttributesToModel(model);
+        return "articlesPage";
     }
 
-    public List<ArticleDto> getArticleDtoListFromPage() {
-        return service.getArticleDtoListFromPage(getApiResponsePage());
+    @GetMapping("/downloadFile/articlesData")
+    ResponseEntity<ByteArrayResource> downloadFile() throws IOException {
+        try {
+            this.service.saveSelectedArticlesToList();
+            this.service.saveArticlesToFile(this.service.getArticlesToSave());
+            this.service.getArticlesToSave().clear();
+            return ResponseEntity.ok()
+                    .contentType(MediaType.asMediaType(MediaType.valueOf("text/csv")))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=articlesData.csv")
+                    .body(new ByteArrayResource(Files.readAllBytes(Paths.get("articlesData.csv"))));
+        } catch (NoSuchFileException e) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
     }
 
-    public void saveArticlesToFile(final HashSet<ArticleDto> articlesToSave) {
-        service.saveArticlesToFile(articlesToSave);
+    private void addAttributesToModel(final Model model) {
+        model.addAttribute("pageNumber", this.articlePaging.getCurrentPage());
+        model.addAttribute("totalPages", this.articlePaging.getTotalPages());
+        model.addAttribute("pageOfArticles", this.service.getDownloadedDtoListMap().get(articlePaging.getCurrentPage()));
     }
 
-    public int getPage() {
-        return page;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
-    public ArticleApiResponsePage getApiResponsePage() {
-        return apiResponsePage;
+    @ExceptionHandler
+    public String errorHandler(Model model, Exception e) {
+        model.addAttribute("error", e);
+        return "error";
     }
 }

@@ -1,9 +1,14 @@
 package io.github.danielzyla.article;
 
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.annotation.SessionScope;
 
+@Component
+@SessionScope
 class ArticleRestClient {
     private final static String NEWS_API_URL_PATH = "https://newsapi.org/v2/top-headlines/";
     private final static String COUNTRY = "pl";
@@ -17,15 +22,17 @@ class ArticleRestClient {
         this.headers = new HttpHeaders();
     }
 
-    ArticleApiResponsePage getArticlesPage(final String apiKey, final int pageSize, final int page) throws InterruptedException {
-        Thread getResponse = new Thread(() -> setResponseEntity(apiKey, pageSize, page));
+    ArticleApiResponsePage getArticlesPage(final String apiKey, final int currentPage) throws InterruptedException {
+        Thread getResponse = new Thread(() -> setResponseEntity(apiKey, currentPage));
         getResponse.setDaemon(true);
         getResponse.start();
         getResponse.join();
-        return getResponseEntity().getBody();
+        if (getResponseEntity() != null) {
+            return getResponseEntity().getBody();
+        } else return null;
     }
 
-    void setResponseEntity(final String apiKey, final int pageSize, final int page) {
+    void setResponseEntity(final String apiKey, final int currentPage) {
         headers.set("X-Api-Key", apiKey);
         HttpEntity<String> request = new HttpEntity<>(headers);
         try {
@@ -33,15 +40,19 @@ class ArticleRestClient {
                     String.format(NEWS_API_URL_PATH + "?country=%s&category=%s&pageSize=%s&page=%s",
                             COUNTRY,
                             CATEGORY,
-                            pageSize,
-                            page
+                            ArticlePaging.PAGE_SIZE,
+                            currentPage
                     ),
                     HttpMethod.GET,
                     request,
                     ArticleApiResponsePage.class
             );
         } catch (HttpClientErrorException e) {
+            e.printStackTrace();
             responseEntity = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        } catch (ResourceAccessException e) {
+            e.printStackTrace();
+            responseEntity = null;
         }
     }
 
