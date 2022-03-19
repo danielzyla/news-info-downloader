@@ -1,32 +1,36 @@
 package io.github.danielzyla.article;
 
 import lombok.Getter;
+import lombok.Setter;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
 
 import static io.github.danielzyla.utils.DateTimeConverter.getFormattedPublishedAt;
 
 @Getter
+@Setter
 public class ArticleDto {
-    private final ArticleSource source;
-    private final String author;
-    private final String title;
-    private final String description;
-    private final String url;
-    private final String urlToImage;
-    private final ZonedDateTime publishedAt;
-    private final String content;
+    private long id;
+    private ArticleSource source;
+    private String author;
+    private String title;
+    private String description;
+    private String url;
+    private String urlToImage;
+    private String publishedAt;
+    private String content;
+    private final static String REG_EX = "(\n|\r|\r\n)";
 
     public ArticleDto(Article article) {
+        this.id = ArticleIdCounter.getId();
         this.source = article.getSource() != null ? article.getSource() : new ArticleSource();
         this.author = article.getAuthor() != null ? article.getAuthor() : "brak danych";
-        this.title = article.getTitle() != null ? article.getTitle() : "brak danych";
-        this.description = article.getDescription() != null ? article.getDescription() : "brak danych";
+        this.title = article.getTitle() != null ? article.getTitle().replaceAll(REG_EX, "") : "brak danych";
+        this.description = article.getDescription() != null ? article.getDescription().replaceAll(REG_EX, "") : "brak danych";
         this.url = article.getUrl() != null ? article.getUrl() : "brak danych";
         this.urlToImage = article.getUrlToImage() != null ? article.getUrlToImage() : "brak danych";
-        this.publishedAt = article.getPublishedAt() != null ? article.getPublishedAt() : ZonedDateTime.now();
-        this.content = article.getContent() != null ? article.getContent() : "brak danych";
+        this.publishedAt = article.getPublishedAt() != null ? getFormattedPublishedAt(article.getPublishedAt()) : "brak danych";
+        this.content = article.getContent() != null ? article.getContent().replaceAll(REG_EX, "") : "brak danych";
     }
 
     @Override
@@ -42,17 +46,5 @@ public class ArticleDto {
     @Override
     public int hashCode() {
         return Objects.hash(title, description, author);
-    }
-
-    @Override
-    public String toString() {
-        return "źródło='" + source.getName() + "'\n" +
-                "autor='" + author + "'\n" +
-                "tytuł='" + title + "'\n" +
-                "opis='" + description + "'\n" +
-                "link='" + url + "'\n" +
-                "link do obrazka='" + urlToImage + "'\n" +
-                "opublikowano='" + getFormattedPublishedAt(getPublishedAt()) + "'\n" +
-                "zawartość='" + content + "'";
     }
 }

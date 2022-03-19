@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiadomości PL</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+    <div class="container">
+      <h2 class="display-2 text-light p-2">Wiadomości z Polski</h2>
+      <p class="text-light ms-3">Artykuły zebrane za pomocą <a href="https://newsapi.org/">NEWS API</a></p>
+      <div class="row g-2">
+        <div class="col-1" style="display: flex; justify-content: center;">
+          <div>
+            <nav class="p-3">
+              <ul class="pagination pagination-lg justify-content-center flex-column" th:if="${totalPages > 1}">
+                <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
+                  <li class="page-item" th:classappend="${i == pageNumber ? 'active' : ''}">
+                    <a class="page-link" th:href="@{'/articlesPage/' + ${i}}" th:text="${i}">i</a>
+                  </li>
+                </th:block>
+              </ul>
+            </nav>
+          </div>
+        </div>
+        <div class="col-11">
+          <div>
+            <form th:action="@{'/articlesPage/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
+              <div class="row justify-content-evenly">
+                <div class="col-12 col-sm-6 col-lg-3 p-3" th:each="a : ${pageOfArticles}">
+                  <div class="card h-100">
+                    <img th:src="${a.urlToImage}" class="card-img-top" alt=" brak zdjęcia">
+                    <div class="card-body">
+                      <h5 class="card-title" th:text="${a.title}">...</h5>
+                      <p class="card-text" th:text="${a.description}">...</p>
+                      <a th:href="${a.url}" target="_blank" class="card-link">link do artykułu</a>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                      <li class="list-group-item" th:text="|Autor: ${a.author}|">...</li>
+                      <li class="list-group-item" th:text="'Źródło: ' + ${a.source.name}">...</li>
+                      <li class="list-group-item" th:text="${a.publishedAt}">...</li>
+                      <li class="list-group-item">
+                        <span>
+                          do zapisu 
+                          <input type="checkbox" th:field="*{selectedArticleDtoIds}" th:value="${a.id}"/>
+                        </span>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" class="btn btn-info ms-3" name="saveArticle">Zapisz wybrane</button>
+              <a th:href="@{/downloadFile/articlesData}" class="btn btn-success ms-3">Pobierz plik</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>   
+</body>
+</html>
