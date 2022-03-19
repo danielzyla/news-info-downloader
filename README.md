@@ -5,7 +5,7 @@
 ## Project overview
 
 The app allows you to get articles from [News API](https://newsapi.org/) and download them to file.
-The result is paginated and you will get it as html view at path /localhost:8080/articlesPage/{pageNumber}.
+The result is paginated and you will get it as html view at path /articlesPage/{pageNumber}.
 
 You can see how it works on the web by clicking [here](https://news-info-downloader.herokuapp.com/).
 
@@ -17,5 +17,5 @@ Java 11 SE, Apache Maven, Spring Boot, RestTemplate client (Spring Framework), P
 
 ## Instruction
 
-Once you start the app at home path /localhost:8080 you will be asked to enter your apiKey to get the access.
+Once you start the app at home path you will be asked to enter your apiKey to get the access.
 Authentication is performed via the X-Api-Key HTTP header.
