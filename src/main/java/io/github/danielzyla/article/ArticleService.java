@@ -3,6 +3,7 @@ package io.github.danielzyla.article;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @Service
+@SessionScope
 public class ArticleService {
 
     private final ArticleFileHandler fileHandler;
@@ -30,7 +32,7 @@ public class ArticleService {
     }
 
     public Optional<ArticleApiResponsePage> updatePage() throws InterruptedException {
-        return Optional.ofNullable(this.restClient.getArticlesPage(getApiKey()));
+        return Optional.ofNullable(this.restClient.getArticlesPage(getApiKey(), articlePaging.getCurrentPage()));
     }
 
     String getArticlesPage(final Model model) throws InterruptedException {

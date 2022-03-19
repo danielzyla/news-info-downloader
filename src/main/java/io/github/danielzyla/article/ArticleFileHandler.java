@@ -14,7 +14,7 @@ class ArticleFileHandler {
 
     private static final String FILENAME = "articlesData.csv";
 
-    void saveArticlesToFile(final HashSet<ArticleDto> articleSet) {
+    synchronized void saveArticlesToFile(final HashSet<ArticleDto> articleSet) {
         try {
             FileSystemUtils.deleteRecursively(Paths.get(FILENAME));
         } catch (IOException e) {

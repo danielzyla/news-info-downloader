@@ -1,5 +1,10 @@
 package io.github.danielzyla.article;
 
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
+
+@Component
+@SessionScope
 class ArticleIdCounter {
     private static long id = 1L;
 

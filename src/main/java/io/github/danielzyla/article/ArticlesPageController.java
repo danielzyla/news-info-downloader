@@ -1,12 +1,12 @@
 package io.github.danielzyla.article;
 
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -55,7 +55,8 @@ public class ArticlesPageController {
             this.service.saveArticlesToFile(this.service.getArticlesToSave());
             this.service.getArticlesToSave().clear();
             return ResponseEntity.ok()
-                    .contentType(MediaType.asMediaType(MimeType.valueOf("text/csv")))
+                    .contentType(MediaType.asMediaType(MediaType.valueOf("text/csv")))
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=articlesData.csv")
                     .body(new ByteArrayResource(Files.readAllBytes(Paths.get("articlesData.csv"))));
         } catch (NoSuchFileException e) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

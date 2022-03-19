@@ -1,8 +1,10 @@
 package io.github.danielzyla.article;
 
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.annotation.SessionScope;
 
 @Component
+@SessionScope
 public class ArticlePaging {
     public final static int PAGE_SIZE = 4;
     private int currentPage;

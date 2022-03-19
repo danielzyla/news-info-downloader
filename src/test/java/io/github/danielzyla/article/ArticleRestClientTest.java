@@ -12,15 +12,13 @@ class ArticleRestClientTest {
     @Test
     void getResponseEntity_shouldReturn401apiServerResponse_WhenWrongApiKeyIsGiven() {
         //given
-        ArticlePaging paging = new ArticlePaging();
-        paging.setCurrentPage(1);
-        ArticleRestClient articleRestClient = new ArticleRestClient(paging);
+        ArticleRestClient articleRestClient = new ArticleRestClient();
         ResponseEntity<ArticleApiResponsePage> pageResponseEntity = new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 
         final String randomAlphanumeric = RandomStringUtils.randomAlphanumeric(10);
 
         //when
-        articleRestClient.setResponseEntity(randomAlphanumeric);
+        articleRestClient.setResponseEntity(randomAlphanumeric, 1);
 
         assertEquals(pageResponseEntity, articleRestClient.getResponseEntity());
         assertEquals("401 UNAUTHORIZED", articleRestClient.getResponseEntity().getStatusCode().toString());
