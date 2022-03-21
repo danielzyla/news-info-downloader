@@ -16,15 +16,15 @@ class LocaleConfig implements WebMvcConfigurer {
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(new Locale("pl", "PL"));
+        slr.setDefaultLocale(new Locale("pl"));
         return slr;
     }
 
     @Bean
     public ResourceBundleMessageSource messageSource() {
         final ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setBasename("i18n/messages");
         source.setDefaultEncoding("UTF-8");
-        source.setBasename("messages");
         return source;
     }
 
