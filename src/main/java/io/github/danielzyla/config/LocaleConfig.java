@@ -21,6 +21,14 @@ class LocaleConfig implements WebMvcConfigurer {
     }
 
     @Bean
+    public ResourceBundleMessageSource messageSource() {
+        final ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setDefaultEncoding("UTF-8");
+        source.setBasename("messages");
+        return source;
+    }
+
+    @Bean
     public LocaleChangeInterceptor localeChangeInterceptor() {
         LocaleChangeInterceptor lci = new LocaleChangeInterceptor();
         lci.setParamName("lang");
