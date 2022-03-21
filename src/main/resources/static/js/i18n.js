@@ -3,7 +3,7 @@ window.onload = function() {
     select.onchange = function() {
         var optionValue = select.options[select.selectedIndex].value
         if (optionValue != "") {
-            window.location.replace('?lang=' + optionValue);
+            window.location.replace('/news-info-downloader.herokuapp.com/?lang=' + optionValue);
         }
     }
 }
