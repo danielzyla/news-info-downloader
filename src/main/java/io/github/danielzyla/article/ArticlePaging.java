@@ -1,9 +1,10 @@
 package io.github.danielzyla.article;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.SessionScope;
+
+import java.util.List;
 
 @Getter
 @Component
@@ -23,14 +24,6 @@ public class ArticlePaging {
         this.totalPages = (int) Math.ceil((double) totalResults / (double) PAGE_SIZE);
     }
 
-    public int getCurrentPage() {
-        return currentPage;
-    }
-
-    public int getTotalPages() {
-        return totalPages;
-    }
-
     public void setCurrentPage(final int currentPage) {
         this.currentPage = currentPage;
     }
@@ -39,7 +32,10 @@ public class ArticlePaging {
         this.country = country;
     }
 
-    public String getCountry() {
-        return country;
+    public List<String> getListOfCountries() {
+        return List.of("pl", "gb", "ae", "ar", "at", "au", "be", "bg", "br", "ca", "ch", "cn", "co",
+                "cu", "cz", "de", "eg", "fr", "gr", "hk", "hu", "id", "ie", "il", "in", "it", "jp",
+                "kr", "lt", "lv", "ma", "mx", "my", "ng", "nl", "no", "nz", "ph", "pt", "ro", "rs",
+                "ru", "sa", "se", "sg", "si", "sk", "th", "tr", "tw", "ua", "us", "ve", "za");
     }
 }

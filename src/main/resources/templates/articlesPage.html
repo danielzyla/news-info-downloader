@@ -9,8 +9,8 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-  <div class="container">
-    <div class="lang d-flex justify-content-end">
+  <div class="container text-light">
+    <div class="lang d-flex justify-content-end p-2">
       <span th:text="#{lang.change}"></span>:
       <select id="locales">
           <option value=""></option>
@@ -27,9 +27,8 @@
       <button class="btn btn-info dropdown-toggle ms-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{country.select}">
         Wybierz kraj
       </button>
-      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-        <li><a class="dropdown-item" href=/articlesPage/pl/1>pl</a></li>
-        <li><a class="dropdown-item" href=/articlesPage/gb/1>gb</a></li>
+      <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton1">
+        <li th:each="c : ${countries}"><a class="dropdown-item" th:href="'/articlesPage/'+${c}+'/1'" th:text="${c}"></a></li>
       </ul>
     </div>
     <div class="row g-2">
@@ -51,7 +50,7 @@
           <form th:action="@{'/articlesPage/'+${country}+'/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
             <div class="row justify-content-evenly">
               <div class="col-12 col-sm-6 col-lg-3 p-3" th:each="a : ${pageOfArticles}">
-                <div class="card h-100">
+                <div class="card h-100 text-dark">
                   <img th:src="${a.urlToImage}" class="card-img-top" alt=" brak zdjęcia">
                   <div class="card-body">
                     <h5 class="card-title" th:text="${a.title}">...</h5>

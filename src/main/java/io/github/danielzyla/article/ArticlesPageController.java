@@ -67,11 +67,9 @@ public class ArticlesPageController {
         }
     }
 
-    @RequestMapping
-
-
     private void addAttributesToModel(final Model model) {
         model.addAttribute("country", this.articlePaging.getCountry());
+        model.addAttribute("countries", this.articlePaging.getListOfCountries());
         model.addAttribute("pageNumber", this.articlePaging.getCurrentPage());
         model.addAttribute("totalPages", this.articlePaging.getTotalPages());
         model.addAttribute("pageOfArticles", this.service.getDownloadedDtoListMap().get(articlePaging.getCurrentPage()));
