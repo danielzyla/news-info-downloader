@@ -50,9 +50,6 @@ public class ArticlesPageController {
     @PostMapping(path = "/articlesPage/{country}/{category}/{pageNumber}", params = "saveArticle")
     String saveSelectedArticles(
             Model model,
-//            @PathVariable String country,
-//            @PathVariable String category,
-//            @PathVariable Integer pageNumber,
             @ModelAttribute("selectedArticles") SelectedArticlesDto fromPage
     ) throws InterruptedException {
         this.service.combineSelectedWithTotal(fromPage);
