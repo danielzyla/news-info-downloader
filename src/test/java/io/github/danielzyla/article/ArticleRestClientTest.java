@@ -18,7 +18,7 @@ class ArticleRestClientTest {
         final String randomAlphanumeric = RandomStringUtils.randomAlphanumeric(10);
 
         //when
-        articleRestClient.setResponseEntity("pl", randomAlphanumeric, 1);
+        articleRestClient.setResponseEntity("pl", "general", randomAlphanumeric, 1);
 
         assertEquals(pageResponseEntity, articleRestClient.getResponseEntity());
         assertEquals("401 UNAUTHORIZED", articleRestClient.getResponseEntity().getStatusCode().toString());

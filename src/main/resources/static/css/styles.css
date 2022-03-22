@@ -20,8 +20,16 @@ body {
     color: red;
 }
 
-input[type=password] {
-    width: 50%;
+@media screen and (max-width: 576px) {
+    input[type=password] {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    input[type=password] {
+        width: 50%;
+    }
 }
 
 input[type=checkbox] {

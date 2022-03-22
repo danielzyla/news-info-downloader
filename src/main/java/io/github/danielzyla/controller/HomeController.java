@@ -1,7 +1,7 @@
 package io.github.danielzyla.controller;
 
-import io.github.danielzyla.article.ArticleService;
 import io.github.danielzyla.article.ArticlePaging;
+import io.github.danielzyla.article.ArticleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +33,7 @@ class HomeController {
         try {
             service.setApiKey(inputApiKey);
             service.updatePage();
-            return "redirect:/articlesPage/" + articlePaging.getCountry() + "/" + articlePaging.getCurrentPage();
+            return "redirect:/articlesPage/" + articlePaging.getCountry() + "/" + articlePaging.getCategory() + "/" + articlePaging.getCurrentPage();
         } catch (IllegalArgumentException | InterruptedException e) {
             e.printStackTrace();
             return "home";

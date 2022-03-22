@@ -24,11 +24,20 @@ public class ArticlesPageController {
         this.articlePaging = articlePaging;
     }
 
-    @GetMapping("/articlesPage/{country}/{pageNumber}")
-    String getArticlesPageView(Model model, @PathVariable String country, @PathVariable Integer pageNumber) throws InterruptedException {
+    @GetMapping("/articlesPage/{country}/{category}/{pageNumber}")
+    String getArticlesPageView(
+            Model model,
+            @PathVariable String country,
+            @PathVariable String category,
+            @PathVariable Integer pageNumber
+    ) throws InterruptedException {
         if (!this.articlePaging.getCountry().equals(country)) {
             this.service.resetPage();
             this.articlePaging.setCountry(country);
+        }
+        if (!this.articlePaging.getCategory().equals(category)) {
+            this.service.resetPage();
+            this.articlePaging.setCategory(category);
         }
         this.articlePaging.setCurrentPage(pageNumber);
         String message = this.service.getArticlesPage(model);
@@ -38,11 +47,12 @@ public class ArticlesPageController {
         return "articlesPage";
     }
 
-    @PostMapping(path = "/articlesPage/{country}/{pageNumber}", params = "saveArticle")
+    @PostMapping(path = "/articlesPage/{country}/{category}/{pageNumber}", params = "saveArticle")
     String saveSelectedArticles(
             Model model,
-            @PathVariable String country,
-            @PathVariable Integer pageNumber,
+//            @PathVariable String country,
+//            @PathVariable String category,
+//            @PathVariable Integer pageNumber,
             @ModelAttribute("selectedArticles") SelectedArticlesDto fromPage
     ) throws InterruptedException {
         this.service.combineSelectedWithTotal(fromPage);
@@ -70,6 +80,8 @@ public class ArticlesPageController {
     private void addAttributesToModel(final Model model) {
         model.addAttribute("country", this.articlePaging.getCountry());
         model.addAttribute("countries", this.articlePaging.getListOfCountries());
+        model.addAttribute("category", this.articlePaging.getCategory());
+        model.addAttribute("categories", this.articlePaging.getListOfCategories());
         model.addAttribute("pageNumber", this.articlePaging.getCurrentPage());
         model.addAttribute("totalPages", this.articlePaging.getTotalPages());
         model.addAttribute("pageOfArticles", this.service.getDownloadedDtoListMap().get(articlePaging.getCurrentPage()));

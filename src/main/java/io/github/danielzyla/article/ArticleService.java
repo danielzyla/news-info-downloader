@@ -32,7 +32,12 @@ public class ArticleService {
     }
 
     public Optional<ArticleApiResponsePage> updatePage() throws InterruptedException {
-        return Optional.ofNullable(this.restClient.getArticlesPage(articlePaging.getCountry(), getApiKey(), articlePaging.getCurrentPage()));
+        return Optional.ofNullable(this.restClient.getArticlesPage(
+                articlePaging.getCountry(),
+                articlePaging.getCategory(),
+                getApiKey(),
+                articlePaging.getCurrentPage()
+        ));
     }
 
     String getArticlesPage(final Model model) throws InterruptedException {
