@@ -1,6 +1,6 @@
 # news-info-downloader
 
-[![version](https://img.shields.io/badge/version-1.3.2-yellow)]()
+[![version](https://img.shields.io/badge/version-1.4.0-yellow)]()
 
 ## Project overview
 
@@ -9,11 +9,9 @@ The result is paginated and you will get it as html view at path /articlesPage/{
 
 You can see how it works on the web by clicking [here](https://news-info-downloader.herokuapp.com/).
 
-The source of articles and the page size are set statically on the backend, but can be easily easily adjusted to the sources offered by News API.
-
 ## Technology used
 
-Java 11 SE, Apache Maven, Spring Boot, RestTemplate client (Spring Framework), Project Lombok, Thymeleaf
+Java 11 SE, Apache Maven, Spring Boot, RestTemplate client (Spring Framework), Project Lombok, Thymeleaf, JavaScript
 
 ## Instruction
 
