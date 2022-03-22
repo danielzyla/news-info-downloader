@@ -1,5 +1,6 @@
 package io.github.danielzyla.article;
 
+import lombok.Getter;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpClientErrorException;
@@ -7,12 +8,11 @@ import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.context.annotation.SessionScope;
 
+@Getter
 @Component
 @SessionScope
 class ArticleRestClient {
     private final static String NEWS_API_URL_PATH = "https://newsapi.org/v2/top-headlines/";
-    private final static String COUNTRY = "pl";
-    private final static String CATEGORY = "business";
     private final RestTemplate restTemplate;
     private final HttpHeaders headers;
     private ResponseEntity<ArticleApiResponsePage> responseEntity;
@@ -22,8 +22,8 @@ class ArticleRestClient {
         this.headers = new HttpHeaders();
     }
 
-    ArticleApiResponsePage getArticlesPage(final String apiKey, final int currentPage) throws InterruptedException {
-        Thread getResponse = new Thread(() -> setResponseEntity(apiKey, currentPage));
+    ArticleApiResponsePage getArticlesPage(final String country, final String category, final String apiKey, final int currentPage) throws InterruptedException {
+        Thread getResponse = new Thread(() -> setResponseEntity(country, category, apiKey, currentPage));
         getResponse.setDaemon(true);
         getResponse.start();
         getResponse.join();
@@ -32,14 +32,14 @@ class ArticleRestClient {
         } else return null;
     }
 
-    void setResponseEntity(final String apiKey, final int currentPage) {
+    void setResponseEntity(final String country, final String category, final String apiKey, final int currentPage) {
         headers.set("X-Api-Key", apiKey);
         HttpEntity<String> request = new HttpEntity<>(headers);
         try {
             responseEntity = restTemplate.exchange(
                     String.format(NEWS_API_URL_PATH + "?country=%s&category=%s&pageSize=%s&page=%s",
-                            COUNTRY,
-                            CATEGORY,
+                            country,
+                            category,
                             ArticlePaging.PAGE_SIZE,
                             currentPage
                     ),
