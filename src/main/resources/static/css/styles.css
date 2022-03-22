@@ -35,3 +35,12 @@ button {
 p > a {
     color: whitesmoke;
 }
+
+footer {
+    padding: 10px;
+    color: white;
+}
+
+footer > p {
+    text-align: center;
+}

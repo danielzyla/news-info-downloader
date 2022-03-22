@@ -32,9 +32,8 @@ class HomeController {
     String enterApiKey(@RequestParam(name = "inputApiKey", defaultValue = "") String inputApiKey) {
         try {
             service.setApiKey(inputApiKey);
-            articlePaging.setCurrentPage(1);
             service.updatePage();
-            return "redirect:/articlesPage/1";
+            return "redirect:/articlesPage/" + articlePaging.getCountry() + "/" + articlePaging.getCurrentPage();
         } catch (IllegalArgumentException | InterruptedException e) {
             e.printStackTrace();
             return "home";

@@ -32,7 +32,7 @@ public class ArticleService {
     }
 
     public Optional<ArticleApiResponsePage> updatePage() throws InterruptedException {
-        return Optional.ofNullable(this.restClient.getArticlesPage(getApiKey(), articlePaging.getCurrentPage()));
+        return Optional.ofNullable(this.restClient.getArticlesPage(articlePaging.getCountry(), getApiKey(), articlePaging.getCurrentPage()));
     }
 
     String getArticlesPage(final Model model) throws InterruptedException {
@@ -82,6 +82,14 @@ public class ArticleService {
                 }
             }
         }
+    }
+
+    void resetPage() {
+        this.apiResponsePageCurrent = null;
+        getApiResponsePageMap().clear();
+        getDownloadedDtoListMap().clear();
+        getSelectedArticlesDtoTotal().getSelectedArticleDtoIds().clear();
+        getArticlesToSave().clear();
     }
 
     void saveArticlesToFile(final HashSet<ArticleDto> articlesToSave) {

@@ -24,8 +24,12 @@ public class ArticlesPageController {
         this.articlePaging = articlePaging;
     }
 
-    @GetMapping("/articlesPage/{pageNumber}")
-    String getArticlesPageView(Model model, @PathVariable Integer pageNumber) throws InterruptedException {
+    @GetMapping("/articlesPage/{country}/{pageNumber}")
+    String getArticlesPageView(Model model, @PathVariable String country, @PathVariable Integer pageNumber) throws InterruptedException {
+        if (!this.articlePaging.getCountry().equals(country)) {
+            this.service.resetPage();
+            this.articlePaging.setCountry(country);
+        }
         this.articlePaging.setCurrentPage(pageNumber);
         String message = this.service.getArticlesPage(model);
         if (message != null) return message;
@@ -34,13 +38,13 @@ public class ArticlesPageController {
         return "articlesPage";
     }
 
-    @PostMapping(path = "/articlesPage/{pageNumber}", params = "saveArticle")
+    @PostMapping(path = "/articlesPage/{country}/{pageNumber}", params = "saveArticle")
     String saveSelectedArticles(
             Model model,
+            @PathVariable String country,
             @PathVariable Integer pageNumber,
             @ModelAttribute("selectedArticles") SelectedArticlesDto fromPage
     ) throws InterruptedException {
-        this.articlePaging.setCurrentPage(pageNumber);
         this.service.combineSelectedWithTotal(fromPage);
         String message = this.service.getArticlesPage(model);
         if (message != null) return message;
@@ -63,7 +67,11 @@ public class ArticlesPageController {
         }
     }
 
+    @RequestMapping
+
+
     private void addAttributesToModel(final Model model) {
+        model.addAttribute("country", this.articlePaging.getCountry());
         model.addAttribute("pageNumber", this.articlePaging.getCurrentPage());
         model.addAttribute("totalPages", this.articlePaging.getTotalPages());
         model.addAttribute("pageOfArticles", this.service.getDownloadedDtoListMap().get(articlePaging.getCurrentPage()));

@@ -18,11 +18,20 @@
           <option value="pl" th:text="#{lang.pl}"></option>
       </select>
     </div>
-    <h2 class="display-2 text-light p-2" th:text="#{newsFrom}">Wiadomości z Polski</h2>
+    <h2 class="display-2 text-light p-2" th:text="#{newsFrom}">Wiadomości z kraju i ze świata</h2>
     <p class="text-light ms-3">
       <span th:text="#{sourceInfo}">Artykuły zebrane za pomocą</span>
       <a href="https://newsapi.org/"> NEWS API</a>
     </p>
+    <div class="dropdown country">
+      <button class="btn btn-info dropdown-toggle ms-3" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{country.select}">
+        Wybierz kraj
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        <li><a class="dropdown-item" href=/articlesPage/pl/1>pl</a></li>
+        <li><a class="dropdown-item" href=/articlesPage/gb/1>gb</a></li>
+      </ul>
+    </div>
     <div class="row g-2">
       <div class="col-1" style="display: flex; justify-content: center;">
         <div>
@@ -30,7 +39,7 @@
             <ul class="pagination pagination-lg justify-content-center flex-column" th:if="${totalPages > 1}">
               <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
                 <li class="page-item" th:classappend="${i == pageNumber ? 'active' : ''}">
-                  <a class="page-link" th:href="@{'/articlesPage/' + ${i}}" th:text="${i}">i</a>
+                  <a class="page-link" th:href="@{'/articlesPage/'+${country}+'/'+${i}}" th:text="${i}">i</a>
                 </li>
               </th:block>
             </ul>
@@ -39,7 +48,7 @@
       </div>
       <div class="col-11">
         <div>
-          <form th:action="@{'/articlesPage/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
+          <form th:action="@{'/articlesPage/'+${country}+'/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
             <div class="row justify-content-evenly">
               <div class="col-12 col-sm-6 col-lg-3 p-3" th:each="a : ${pageOfArticles}">
                 <div class="card h-100">
@@ -69,6 +78,11 @@
         </div>
       </div>
     </div>
+    <footer>
+      <p>
+          <span th:text="|&copy; io.github.danielzyla 2022|"></span>
+      </p>
+    </footer>
   </div>
 
   <script type="text/javascript" src="/js/i18n.js"></script>
