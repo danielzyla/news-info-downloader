@@ -27,7 +27,7 @@
     <div class="container">
       <div class="row justify-content-start">
         <div class="col-sm-6 col-md-4 col-lg-3 dropdown country">
-          <button class="btn btn-primary dropdown-toggle w-100 m-2" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{country.select}">
+          <button class="btn btn-primary dropdown-toggle w-100 mt-2 mb-2" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{country.select}">
             Wybierz kraj
           </button>
           <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton1">
@@ -35,7 +35,7 @@
           </ul>
         </div>
         <div class="col-sm-6 col-md-4 col-lg-3 dropdown category">
-          <button class="btn btn-primary dropdown-toggle w-100 m-2" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{category.select}">
+          <button class="btn btn-primary dropdown-toggle w-100 mt-2 mb-2" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false" th:text="#{category.select}">
             Kategoria wiadomości
           </button>
           <ul class="dropdown-menu"  aria-labelledby="dropdownMenuButton2">
@@ -44,12 +44,41 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-center"><p class="fs-4 text-warning m-2" th:text="|${#strings.toUpperCase(country)} - ${#strings.toUpperCase(category)}|"></p></div>
-    <div class="row g-2">
-      <div class="col-1" style="display: flex; justify-content: center;">
-        <div>
-          <nav class="p-3">
-            <ul class="pagination justify-content-center flex-column" th:if="${totalPages > 1}">
+    <div class="d-flex justify-content-center">
+      <p class="fs-4 text-warning m-2" >
+          <span th:text="${#strings.toUpperCase(country)}"></span>
+          <span> - </span>
+          <span id="category-info" th:text="${category}"></span>
+      </p>
+    </div>
+    <div>
+      <form th:action="@{'/articlesPage/'+${country}+'/'+${category}+'/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
+        <div class="row justify-content-evenly">
+          <div class="col-12 col-sm-6 col-lg-3 p-3" th:each="a : ${pageOfArticles}">
+            <div class="card h-100 text-dark">
+              <img th:src="${a.urlToImage}" class="card-img-top" alt=" brak zdjęcia">
+              <div class="card-body">
+                <h5 class="card-title" th:text="${a.title}">...</h5>
+                <p class="card-text" th:text="${a.description}">...</p>
+                <a th:href="${a.url}" target="_blank" class="card-link" th:text="#{link}">link do artykułu</a>
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item" th:text="|#{author}: ${a.author}|">...</li>
+                <li class="list-group-item" th:text="|#{source}: ${a.source.name}|">...</li>
+                <li class="list-group-item" th:text="${a.publishedAt}">...</li>
+                <li class="list-group-item">
+                  <span>
+                    <span th:text="#{save}">do zapisu</span>
+                    <input type="checkbox" th:field="*{selectedArticleDtoIds}" th:value="${a.id}"/>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: center;">
+          <nav class="pagination-nav pt-3">
+            <ul class="pagination" th:if="${totalPages > 1}">
               <th:block th:each="i: ${#numbers.sequence(1, totalPages)}">
                 <li class="page-item" th:classappend="${i == pageNumber ? 'active' : ''}">
                   <a class="page-link" th:href="@{'/articlesPage/'+${country}+'/'+${category}+'/'+${i}}" th:text="${i}">i</a>
@@ -58,38 +87,9 @@
             </ul>
           </nav>
         </div>
-      </div>
-      <div class="col-11">
-        <div>
-          <form th:action="@{'/articlesPage/'+${country}+'/'+${category}+'/'+${pageNumber}}" th:object="${selectedArticles}" method="post">
-            <div class="row justify-content-evenly">
-              <div class="col-12 col-sm-6 col-lg-3 p-3" th:each="a : ${pageOfArticles}">
-                <div class="card h-100 text-dark">
-                  <img th:src="${a.urlToImage}" class="card-img-top" alt=" brak zdjęcia">
-                  <div class="card-body">
-                    <h5 class="card-title" th:text="${a.title}">...</h5>
-                    <p class="card-text" th:text="${a.description}">...</p>
-                    <a th:href="${a.url}" target="_blank" class="card-link" th:text="#{link}">link do artykułu</a>
-                  </div>
-                  <ul class="list-group list-group-flush">
-                    <li class="list-group-item" th:text="|#{author}: ${a.author}|">...</li>
-                    <li class="list-group-item" th:text="|#{source}: ${a.source.name}|">...</li>
-                    <li class="list-group-item" th:text="${a.publishedAt}">...</li>
-                    <li class="list-group-item">
-                      <span>
-                        <span th:text="#{save}">do zapisu</span>
-                        <input type="checkbox" th:field="*{selectedArticleDtoIds}" th:value="${a.id}"/>
-                      </span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <button type="submit" class="btn btn-primary ms-3" name="saveArticle" th:text="#{button.save.selected}">Zapisz wybrane</button>
-            <a th:href="@{/downloadFile/articlesData}" class="btn btn-success ms-3" th:text="#{download}">Pobierz plik</a>
-          </form>
-        </div>
-      </div>
+        <button type="submit" class="btn btn-primary ms-2 mt-3" name="saveArticle" th:text="#{button.save.selected}">Zapisz wybrane</button>
+        <a th:href="@{/downloadFile/articlesData}" class="btn btn-success ms-2 mt-3" th:text="#{download}">Pobierz plik</a>
+      </form>
     </div>
     <footer>
       <p>

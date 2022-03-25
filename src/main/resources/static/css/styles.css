@@ -36,10 +36,6 @@ input[type=checkbox] {
     margin: 10px;
 }
 
-button {
-    margin: 20px 0 20px 0;
-}
-
 p > a {
     color: whitesmoke;
 }
@@ -51,4 +47,16 @@ footer {
 
 footer > p {
     text-align: center;
+}
+
+.dropdown-menu {
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: calc(100vh - 150px);
+}
+
+.pagination-nav {
+    overflow: hidden;
+    overflow-x: auto;
+    max-width: 60%;
 }
