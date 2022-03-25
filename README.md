@@ -1,11 +1,11 @@
 # news-info-downloader
 
-[![version](https://img.shields.io/badge/version-1.4.0-yellow)]()
+[![version](https://img.shields.io/badge/version-1.4.1-yellow)]()
 
 ## Project overview
 
 The app allows you to get articles from [News API](https://newsapi.org/) and download them to file.
-The result is paginated and you will get it as html view at path /articlesPage/{pageNumber}.
+The result is paginated and you will get it as html view at path /articlesPage/{country}/{category}/{pageNumber}.
 
 You can see how it works on the web by clicking [here](https://news-info-downloader.herokuapp.com/).
 
