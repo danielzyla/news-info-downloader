@@ -1,7 +1,7 @@
 package io.github.danielzyla.controller;
 
-import io.github.danielzyla.article.ArticleService;
 import io.github.danielzyla.article.ArticlePaging;
+import io.github.danielzyla.article.ArticleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,9 +32,8 @@ class HomeController {
     String enterApiKey(@RequestParam(name = "inputApiKey", defaultValue = "") String inputApiKey) {
         try {
             service.setApiKey(inputApiKey);
-            articlePaging.setCurrentPage(1);
             service.updatePage();
-            return "redirect:/articlesPage/1";
+            return "redirect:/articlesPage/" + articlePaging.getCountry() + "/" + articlePaging.getCategory() + "/" + articlePaging.getCurrentPage();
         } catch (IllegalArgumentException | InterruptedException e) {
             e.printStackTrace();
             return "home";

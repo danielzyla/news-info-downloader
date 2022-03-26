@@ -20,18 +20,43 @@ body {
     color: red;
 }
 
-input[type=password] {
-    width: 50%;
+@media screen and (max-width: 576px) {
+    input[type=password] {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 576px) {
+    input[type=password] {
+        width: 50%;
+    }
 }
 
 input[type=checkbox] {
     margin: 10px;
 }
 
-button {
-    margin: 20px 0 20px 0;
-}
-
 p > a {
     color: whitesmoke;
+}
+
+footer {
+    padding: 10px;
+    color: white;
+}
+
+footer > p {
+    text-align: center;
+}
+
+.dropdown-menu {
+    overflow: hidden;
+    overflow-y: auto;
+    max-height: calc(100vh - 150px);
+}
+
+.pagination-nav {
+    overflow: hidden;
+    overflow-x: auto;
+    max-width: 60%;
 }
